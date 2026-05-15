@@ -25,3 +25,6 @@ __pycache__
 *.rej
 artifacts/
 runs/
+
+test_dojo.py
+inspect_dataset.py 

@@ -34,6 +34,23 @@ from .training import (
 )
 from .visualize import build_visualization_html, visualize_dag
 
+try:  
+    from .lean_env import LeanEnvironment, StepResult, TheoremInfo, theorem_info_from_dataset_row  
+    from .replay import ReplaySummary, ReplayTrace, replay_proof  
+    from .search import SearchConfig, SearchTrace, greedy_search, predict_tactics, state_text_to_pyg  
+except ImportError:  
+    pass
+
+try:  
+    from .lean_env import LeanEnvironment, StepResult, TheoremInfo, theorem_info_from_dataset_row  
+    _HAS_LEAN_ENV = True  
+except ImportError:  
+    _HAS_LEAN_ENV = False  
+  
+if _HAS_LEAN_ENV:  
+    from .replay import ReplaySummary, ReplayTrace, replay_proof  
+    from .search import SearchConfig, SearchTrace, greedy_search, predict_tactics, state_text_to_pyg
+
 __all__ = [
     "AblationSuiteConfig",
     "AblationVariant",
@@ -96,4 +113,16 @@ __all__ = [
     "UNKNOWN_TACTIC",
     "visualize_dag",
     "write_dag_json",
+    "LeanEnvironment",  
+    "StepResult",  
+    "TheoremInfo",  
+    "theorem_info_from_dataset_row",  
+    "ReplaySummary",  
+    "ReplayTrace",  
+    "replay_proof",  
+    "SearchConfig",  
+    "SearchTrace",  
+    "greedy_search",  
+    "predict_tactics",  
+    "state_text_to_pyg",
 ]

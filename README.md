@@ -20,6 +20,10 @@ The implementation now lives in the `atp_lean_gnn` package:
 - `reporting.py`: terminal-safe summaries and output helpers
 - `cli.py`: command-line entrypoint
 
+- `lean_env.py`: LeanDojo wrapper for executing tactics against Lean  
+- `replay.py`: replay gold-tactic traces through LeanDojo  
+- `search.py`: GNN-guided proof search loop via LeanDojo
+
 `main.py` remains as a thin compatibility wrapper, so `python main.py ...` still works.
 
 ## Common commands
@@ -88,6 +92,20 @@ Run the first scripted ablation suite for edge direction, readout, and node-type
 
 ```bash
 python scripts/run_ablation_suite.py --suite-config configs/ablations/issue4_suite.json
+```
+
+## LeanDojo Integration  
+  
+Replay gold-tactic traces through LeanDojo:  
+  
+```bash  
+python scripts/replay_proof.py --limit 3
+```
+
+Run GNN-guided proof search (requires a trained model):
+
+```bash
+python scripts/run_search.py --run-dir runs/baseline_gnn/run_YYYYMMDD_HHMMSS --limit 5
 ```
 
 ## Documentation

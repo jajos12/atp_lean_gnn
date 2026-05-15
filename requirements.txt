@@ -8,3 +8,4 @@
 datasets>=2.20
 torch>=2.4
 torch-geometric>=2.5
+lean-dojo>=2.1
