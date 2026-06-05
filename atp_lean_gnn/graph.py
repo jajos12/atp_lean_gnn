@@ -14,9 +14,15 @@ class GraphNode:
     id: int
     label: str
     node_type: str
+    children: tuple[int, ...] = field(default_factory=tuple)
 
     def as_dict(self) -> dict[str, object]:
-        return {"id": self.id, "label": self.label, "node_type": self.node_type}
+        return {
+            "id": self.id,
+            "label": self.label,
+            "node_type": self.node_type,
+            "children": list(self.children),
+        }
 
 
 @dataclass(frozen=True)
@@ -77,7 +83,7 @@ class DAGBuilder:
             return self._memo[key]
 
         node_id = len(self.nodes)
-        self.nodes.append(GraphNode(node_id, label, _classify_label(label)))
+        self.nodes.append(GraphNode(node_id, label, _classify_label(label), children))
         for child_id in children:
             self.edges.append((child_id, node_id))
         self._memo[key] = node_id
@@ -151,6 +157,17 @@ def proof_state_to_dag(state: str | ProofState) -> DAGBuilder:
     goal_node = dag.get_or_create("Goal", (goal_expr_node,))
     root_ids.append(goal_node)
     dag.get_or_create("State", tuple(root_ids))
+    return dag
+
+
+def lemma_statement_to_dag(statement: str) -> DAGBuilder:
+    """Build a DAG for a lemma statement treated as a goal-only proof state."""
+    dag = DAGBuilder()
+    parser = ExprParser(dag)
+
+    goal_expr_node = parser.parse(statement)
+    goal_node = dag.get_or_create("Goal", (goal_expr_node,))
+    dag.get_or_create("State", (goal_node,))
     return dag
 
 
